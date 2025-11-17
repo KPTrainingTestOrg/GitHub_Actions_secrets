@@ -17,6 +17,8 @@ jobs:
           echo "COLOR=blue" >> "$GITHUB_OUTPUT"
       - name: Get color
         run: echo "The selected color is ${{ steps.color-selector.outputs.COLOR }}"
+    outputs:
+      COLOR: ${{ steps.color-selector.outputs.COLOR }}
         
   producer:
     runs-on: ubuntu-latest
@@ -27,7 +29,9 @@ jobs:
       - name: Make a sentence
         id: sentence_maker
         run: |
-            echo "full-message=Hello with the color: $message" >> $GITHUB_ENV
+            echo "full-message=Hello with the color: $message" >> "$GITHUB_ENV"
+    outputs:
+        full-message: ${{ steps.sentence_maker.outputs.full-message }}
 
   consumer:
     runs-on: ubuntu-latest
