@@ -31,13 +31,13 @@ jobs:
         run: |
             echo "full-message=Hello with the color: $message" >> "$GITHUB_ENV"
     outputs:
-        full-message: ${{ steps.sentence_maker.outputs.full-message }}
+        a-message: ${{ steps.sentence_maker.outputs.full-message }}
 
   consumer:
     runs-on: ubuntu-latest
     needs: producer
     env:
-        another_message: ${{ needs.producer.outputs.full-message }}
+        another_message: ${{ needs.producer.outputs.a-message }}
     steps:
       - name: Print the message
         run: |
