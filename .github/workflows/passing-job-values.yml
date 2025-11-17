@@ -1,0 +1,67 @@
+# This is a basic workflow to help you get started with Actions
+
+name: passing job values
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+jobs:
+  pass_in_one_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set color
+        id: color-selector
+        run: |
+          echo "$COLOR=blue" >> $GITHUB_OUTPUT
+      - name: Get color
+        run: echo "The selected color is ${{ steps.color-selector.outputs.COLOR }}"
+        
+  producer:
+    runs-on: ubuntu-latest
+    needs: pass_in_one_job
+    env:
+        message: ${{ needs.pass_in_one_job.outputs.COLOR }}
+    steps:
+      - name: Make a sentence
+        id: sentence_maker
+        run: |
+            echo "full-message=Hello with the color: $message" >> $GITHUB_ENV
+
+  consumer:
+    runs-on: ubuntu-latest
+    needs: producer
+    env:
+        another_message: ${{ needs.producer.outputs.full-message }}
+    steps:
+      - name: Print the message
+        run: |
+          echo ${{ env.another_message }}
+
+  job_1:
+    name: Add 3 and 7
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |
+          expr 3 + 7 > result.txt
+      - name: Upload the result
+        uses: actions/upload-artifact@v4
+        with:
+          name: result.txt
+          path: result.txt
+
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: windows-latest
+    steps:
+      - name: Download the result
+        uses: actions/download-artifact@v4
+        with:
+          name: result.txt  
+      - shell: bash
+        run: |
+          value=`cat result.txt`
+          echo $(expr $value \* 9) 
