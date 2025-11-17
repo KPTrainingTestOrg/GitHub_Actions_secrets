@@ -16,6 +16,9 @@ on:
           required: true
           default: 'dev'
           type: environment
+        tags:
+          description: 'Tags to filter'
+          required: true
 
 jobs:
   log-the-inputs:
