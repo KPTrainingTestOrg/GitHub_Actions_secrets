@@ -11,9 +11,9 @@ jobs:
     steps:
     - name: Use variables 1
       run: |
-        echo "Repository variable : $REPOSITORY_VAR"
-        echo "Organization variable : $ORGANIZATION_VAR"
-        echo "Environment variable : $ENVIRONMENT_VAR"
+        echo "Repository variable : ${{ env.REPOSITORY_VAR }}"
+        echo "Organization variable : ${{ env.ORGANIZATION_VAR }}"
+        echo "Environment variable : ${{ env.ENVIRONMENT_VAR }}"
         echo "Alice has a cat named $cat_name"
         echo "Should be variable in workflow scope:$WORKFLOW_VAR"
         echo "Should be variable in job scope:$JOB_VAR"
